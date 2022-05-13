@@ -1,0 +1,13 @@
+
+.container-fluid{
+    display:flex;
+    gap: 65%;
+    background-color: rgb(211, 230, 247);
+}
+#playerIcon{
+    max-width: 100px;
+}
+h3{
+    margin-left:100px;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
