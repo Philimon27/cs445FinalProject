@@ -1,7 +1,9 @@
-
+body{
+    background-color: rgb(33, 32, 32);
+}
 .container-fluid{
     display:flex;
-    gap: 65%;
+    justify-content: space-between;
     background-color: rgb(211, 230, 247);
 }
 #playerIcon{
@@ -10,4 +12,35 @@
 h3{
     margin-left:100px;
     font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+ #searchbtn{
+    display:none;
+}
+#searchinput{
+    display: none;
+    height:40px;
+    width:200px;
+}
+#logout{
+    display: none;
+}
+#afterLogin{
+    margin-left: 500px;
+}
+#search{
+    margin-right: 700px;
+}
+table{
+    border:0px solid ;
+    background-color:rgb(211, 230, 247);
+    width: 90%;
+    margin: 50px;
+    padding:10px
+}
+th,td{
+    border:1px  grey;
+    width: 20%;
+}
+tr:hover{
+    background-color: rgb(180, 216, 248);;
 }
