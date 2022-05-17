@@ -50,3 +50,18 @@ tr:hover{
 #errorMessage{
     color:red;
 }
+#playlistText{
+    color: white;
+}
+#player{
+    width: 90%;
+    margin: 50px;
+    padding:10px;
+    z-index: 1;
+    height: 100px;
+    
+    background-color: rgb(211, 230, 247);
+    border: solid black 1px;;
+
+
+}
