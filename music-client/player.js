@@ -1,8 +1,6 @@
 window.onload = function () {
   if (sessionStorage.getItem("accessToken")) {
     loggedIn();
-    fetchMusic();
-    fetchPlayList();
   } else {
     notLoggedin();
   }
@@ -40,8 +38,7 @@ function loggedInFeatures(json) {
     document.getElementById("username").value = "";
     document.getElementById("password").value = "";
     sessionStorage.setItem("accessToken", json.accessToken);
-    fetchMusic();
-    fetchPlayList();
+    
     loggedIn();
   }
 }
@@ -70,19 +67,18 @@ function search() {
 
           trElement.innerHTML = `<td>${++count}</td>
                                     <td>${item.title}</td>
-                                    <td>${item.releaseDate}</td>`;
+                                    <td>${item.releaseDate}</td>
+                                    <td> <div myid="${
+                                        item.id
+                                      }" onclick="add(this)">+</div></td`;
 
-          let p = document.createElement("p");
-          p.setAttribute("myid", item.id);
-          p.innerText = "+";
-          trElement.append(p);
           sTable.append(trElement);
           searchVal.value = "";
         });
       });
   };
 }
-
+//*******Fetching Music */
 function fetchMusic() {
   fetch("http://localhost:3000/api/music", {
     headers: {
@@ -155,10 +151,11 @@ function fetchPlayList() {
   })
     .then((response) => response.json())
     .then((songs) => {
-      let tableElement = document.getElementsByTagName("table")[1];
+        if(!songs.length==0){
+            let tableElement = document.getElementsByTagName("table")[1];
 
       let tritem = document.createElement("tr");
-      tritem.innerHTML = `<th>Order</th>
+      tritem.innerHTML = `   <th>Order</th>
                              <th>Title</th>
                              <th>Actions</th> `;
       tableElement.append(tritem);
@@ -177,10 +174,15 @@ function fetchPlayList() {
 
         tableElement.append(trElement);
       });
+        }
+        else{
+            document.getElementById("playlistText").innerHTML="No Playlist"
+        }
+      
     });
 }
 
-// *****Removing from playlist******
+// *****Removing From Playlist******
 function del(obj) {
   let dId = obj.getAttribute("rid");
   fetch("http://localhost:3000/api/playlist/remove", {
@@ -195,26 +197,27 @@ function del(obj) {
   })
     .then((response) => response.json())
     .then((data) => {
-      let rTable = document.getElementsByTagName("table")[1];
-      rTable.innerHTML = "";
+        console.log(data);
+    //   let rTable = document.getElementsByTagName("table")[1];
+    //   rTable.innerHTML = "";
 
-      data.forEach(function (item) {
-        let trElement = document.createElement("tr");
+    //   data.forEach(function (item) {
+    //     let trElement = document.createElement("tr");
 
-        trElement.innerHTML = `<td>${item.orderId}</td>
-                                      <td>${item.title}</td>
-                                      <td><span rid="${item.songId}" onclick="del(this)">X</span> &nbsp;
-                                      <span id="pbtn" play="${item.urlPath}" onclick="play(this)">
-                                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                      fill="currentColor" class="bi bi-play-circle-fill" viewBox="0 0 16 16">
-                                                      <path
-                                                          d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z" />
-                                                  </svg></span></td>`;
-        rTable.append(trElement);
+    //     trElement.innerHTML = `<td>${item.orderId}</td>
+    //                                   <td>${item.title}</td>
+    //                                   <td><span rid="${item.songId}" onclick="del(this)">X</span> &nbsp;
+    //                                   <span id="pbtn" play="${item.urlPath}" onclick="play(this)">
+    //                                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+    //                                                   fill="currentColor" class="bi bi-play-circle-fill" viewBox="0 0 16 16">
+    //                                                   <path
+    //                                                       d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z" />
+    //                                               </svg></span></td>`;
+    //     rTable.append(trElement);
       });
-    });
-}
 
+}
+// PLAYING MUSIC
 function play(obj) {
   let pAtt = obj.getAttribute("play");
   let audioPlayer = document.getElementById("player");
@@ -223,6 +226,7 @@ function play(obj) {
      </audio>`;
 }
 
+//LOGGING IN
 function loggedIn() {
   document.getElementById("searchinput").style.display = "block";
   document.getElementById("searchbtn").style.display = "block";
@@ -233,8 +237,12 @@ function loggedIn() {
   document.getElementById("password").style.display = "none";
   document.getElementById("btn").style.display = "none";
   document.getElementById("player").style.display="block"
-}
+  fetchMusic();
+  fetchPlayList();
 
+
+}
+//LOGGING OUT
 function notLoggedin() {
   document.getElementById("searchinput").style.display = "none";
   document.getElementById("searchbtn").style.display = "none";
